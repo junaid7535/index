@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Search Bar</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('background-image.jpg'); /* Add the relevant background image */
+            background-size: cover;
+            background-position: center;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-item {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            border-right: 1px solid #ddd;
+            padding-right: 20px;
+        }
+
+        .search-item:last-child {
+            border-right: none;
+            margin-right: 0;
+        }
+
+        .icon img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+
+        .text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .label {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .value {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .search-button {
+            background-color: #7f56d9;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-button img {
+            width: 16px;
+            height: 16px;
+            filter: invert(1);
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 5px;
+            z-index: 10;
+        }
+
+        .dropdown-item {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .dropdown-item:hover {
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-bar">
+        <div class="search-item" id="location">
+            <div class="icon">
+                <img src="/Imgs/icons/location.png" alt="Location Icon">
+            </div>
+            <div class="text">
+                <span class="label">Location</span>
+                <span class="value">Explore nearby</span>
+                <div class="dropdown" id="locationDropdown">
+                    <div class="dropdown-item">Explore nearby</div>
+                    <div class="dropdown-item">Delhi</div>
+                    <div class="dropdown-item">Shimla (Himachal Pradesh)</div>
+                    <div class="dropdown-item">Manali (Himachal Pradesh)</div>
+                    <div class="dropdown-item">Leh-Ladakh (Jammu & Kashmir)</div>
+                    <div class="dropdown-item">Nainital (Uttarakhand)</div>
+                    <div class="dropdown-item">Spiti Valley (Himachal Pradesh)</div>
+                    <div class="dropdown-item">Kashmir (Jammu & Kashmir)</div>
+                    <div class="dropdown-item">Rishikesh (Uttarakhand)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-item" id="activity">
+            <div class="icon">
+                <img src="/Imgs/icons/activities.png" alt="Activity Icon">
+            </div>
+            <div class="text">
+                <span class="label">Activity</span>
+                <span class="value">All Activities</span>
+                <div class="dropdown" id="activityDropdown">
+                    <div class="dropdown-item">All Activities</div>
+                    <div class="dropdown-item">Trekking and Hiking</div>
+                    <div class="dropdown-item">Rock Climbing</div>
+                    <div class="dropdown-item">Historical Tours</div>
+                    <div class="dropdown-item">Safari and Wildlife Tours</div>
+                    <div class="dropdown-item">Biking</div>
+                    <div class="dropdown-item">Skydiving and Scuba Diving</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-item" id="date">
+            <div class="icon">
+                <img src="/Imgs/icons/calendar.png" alt="Calendar Icon">
+            </div>
+            <div class="text">
+                <span class="label">When</span>
+                <input type="date" class="value" style="border: none; font-size: 14px;" />
+            </div>
+        </div>
+
+        <div class="search-item" id="guests">
+            <div class="icon">
+                <img src="/Imgs/icons/guest.png" alt="Guest Icon">
+            </div>
+            <div class="text">
+                <span class="label">Guests</span>
+                <input type="number" min="1" class="value" value="1" style="border: none; font-size: 14px; width: 40px;" />
+            </div>
+        </div>
+
+        <button class="search-button" id="searchButton">
+            <img src="/Imgs/icons/search.svg" alt="Search Icon">
+        </button>
+    </div>
+
+    <script>
+        // Dropdown logic
+        document.querySelectorAll('.value').forEach((element) => {
+            element.addEventListener('click', function () {
+                const dropdown = this.nextElementSibling;
+                if (dropdown) {
+                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                }
+            });
+        });
+
+        // Close dropdowns when clicking outside
+        window.addEventListener('click', function (event) {
+            if (!event.target.closest('.search-item')) {
+                document.querySelectorAll('.dropdown').forEach((dropdown) => {
+                    dropdown.style.display = 'none';
+                });
+            }
+        });
+
+        // Dropdown item selection
+        document.querySelectorAll('.dropdown-item').forEach((item) => {
+            item.addEventListener('click', function () {
+                const valueElement = this.closest('.text').querySelector('.value');
+                valueElement.textContent = this.textContent;
+                this.parentElement.style.display = 'none';
+            });
+        });
+
+        // Search button logic
+        document.getElementById('searchButton').addEventListener('click', function () {
+            const location = document.querySelector('#location .value').textContent;
+            const activity = document.querySelector('#activity .value').textContent;
+            const date = document.querySelector('#date input').value;
+            const guests = document.querySelector('#guests input').value;
+
+            alert(`Searching for:\nLocation: ${location}\nActivity: ${activity}\nDate: ${date}\nGuests: ${guests}`);
+        });
+    </script>
+</body>
+</html>
